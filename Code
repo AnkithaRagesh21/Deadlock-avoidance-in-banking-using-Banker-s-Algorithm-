@@ -1,0 +1,127 @@
+#include <stdio.h>
+#include <stdbool.h>
+
+#define MAX_CUSTOMERS 5
+#define MAX_RESOURCES 3
+
+// Global variables
+int available[MAX_RESOURCES];
+int maximum[MAX_CUSTOMERS][MAX_RESOURCES];
+int allocation[MAX_CUSTOMERS][MAX_RESOURCES];
+int need[MAX_CUSTOMERS][MAX_RESOURCES];
+
+// Function declarations
+void initialize();
+bool request_resources(int customer_id, int request[]);
+void release_resources(int customer_id, int release[]);
+bool is_safe_state();
+void display_status();
+
+int main() {
+    initialize();
+
+    int customer_id;
+    int request[MAX_RESOURCES];
+
+    // Input: Enter customer number and loan request
+    printf("Enter customer number (0 to %d): ", MAX_CUSTOMERS - 1);
+    scanf("%d", &customer_id);
+
+    if (customer_id < 0 || customer_id >= MAX_CUSTOMERS) {
+        printf("Invalid customer number. Exiting.\n");
+        return 1;
+    }
+
+    printf("Enter loan request for customer %d: ", customer_id);
+    for (int i = 0; i < MAX_RESOURCES; ++i) {
+        scanf("%d", &request[i]);
+    }
+
+    // Request resources
+    if (request_resources(customer_id, request)) {
+        // Loan approval logic
+        // Replace this with your loan approval conditions
+        if (is_safe_state()) {
+            // Loan approved, update allocation and display status
+            printf("Loan approved! Customer %d is granted resources.\n", customer_id);
+            display_status();
+        } else {
+            // Loan not approved, release resources
+            printf("Loan not approved! Releasing resources for Customer %d.\n", customer_id);
+            release_resources(customer_id, request);
+            display_status();
+        }
+    } else {
+        printf("Request cannot be fulfilled for Customer %d.\n", customer_id);
+    }
+
+    return 0;
+}
+
+void initialize() {
+    // Initialize available resources
+    printf("Enter available resources: ");
+    for (int i = 0; i < MAX_RESOURCES; ++i) {
+        scanf("%d", &available[i]);
+    }
+
+    // Initialize maximum resources for each customer
+    for (int i = 0; i < MAX_CUSTOMERS; ++i) {
+        printf("Enter maximum loan for customer %d: ", i);
+        for (int j = 0; j < MAX_RESOURCES; ++j) {
+            scanf("%d", &maximum[i][j]);
+            allocation[i][j] = 0;
+            need[i][j] = maximum[i][j];
+        }
+    }
+}
+
+bool request_resources(int customer_id, int request[]) {
+    // Check if request is within need and available resources
+    for (int i = 0; i < MAX_RESOURCES; ++i) {
+        if (request[i] > need[customer_id][i] || request[i] > available[i]) {
+            return false; // Request cannot be fulfilled
+        }
+    }
+
+    // Try allocating resources temporarily to check safety
+    for (int i = 0; i < MAX_RESOURCES; ++i) {
+        available[i] -= request[i];
+        allocation[customer_id][i] += request[i];
+        need[customer_id][i] -= request[i];
+    }
+
+    // Check if the system is still in a safe state
+    if (!is_safe_state()) {
+        // Unsafe state, revert changes and deny request
+        for (int i = 0; i < MAX_RESOURCES; ++i) {
+            available[i] += request[i];
+            allocation[customer_id][i] -= request[i];
+            need[customer_id][i] += request[i];
+        }
+        return false;
+    }
+
+    return true; // Request granted
+}
+
+void release_resources(int customer_id, int release[]) {
+    // Release allocated resources and update need and available
+    for (int i = 0; i < MAX_RESOURCES; ++i) {
+        available[i] += release[i];
+        allocation[customer_id][i] -= release[i];
+        need[customer_id][i] += release[i];
+    }
+}
+
+bool is_safe_state() {
+    // Check if the system is in a safe state using the Banker's algorithm
+    // (Implementation is the same as in the previous code)
+    // ...
+}
+
+void display_status() {
+    // Display the current status of the system
+    // (Implementation is the same as in the previous code)
+    // ...
+}
