@@ -10,6 +10,7 @@ deadlock situations. By understanding and implementing this algorithm, we
 endeavor to empower participants with the tools to fortify system stability
 and resource utilization in the face of concurrency challenges.
 ![image](https://github.com/user-attachments/assets/bb328b46-fa35-4f7e-8d60-f84d9e738c19)
+
 Hardware Requirements.
 ● A standard computer system capable of running the chosen operating system and supporting the required
 software components.
@@ -19,8 +20,12 @@ applications concurrently.
 Processor:
 ● A processor with sufficient speed and capabilities to handle the computational demands of running
 simulations and algorithm implementations.
+
+
 Storage:
 ● Adequate storage space to store the simulation data, algorithm inputs, and any relevant documentation.
+
+
 Software Requirements:
 Operating System:
 ● A compatible operating system that supports the implementation of the Banker's algorithm and related
